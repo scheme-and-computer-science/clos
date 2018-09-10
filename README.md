@@ -24,10 +24,15 @@ Are you back now? Good.
 Table of Contents
 
 > Introduction
+
 > How to Use Tiny CLOS
+
 > CLOS vs. other approaches to OOP
+
 > Classes and Objects in CLOS
+
 > Generic functions and methods
+
 > Introduction
 
 CLOS, an acronym for Common Lisp Object System, is a standard set of extensions to the Common Lisp language to help people do object-oriented programming in Lisp. Scheme, as you know, is a dialect of Lisp with a simpler, more consistent syntax than Common Lisp's. Tiny CLOS is a Scheme version of CLOS written in 1992 by Gregor Kiczales. It differs from CLOS syntactically, but the basic approach to OOP is the same as in CLOS.
