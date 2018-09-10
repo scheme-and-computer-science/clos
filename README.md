@@ -62,6 +62,6 @@ To create a new instance of an existing class, use the make function:
 creates a new instance of the <person> class and binds the Scheme variable sam to it. Some classes are defined in such a way (see the initialize function below) that additional arguments can be provided to the make function to determine properties of the new instance, e.g. to initialize its instance variables. For example, one might define the <person> class in such a manner that 
 
 
-This manuel is modify from Tiny CLOS Tutorial
+This manuel is modified from Tiny CLOS Tutorial
 
 https://home.adelphi.edu/sbloch/class/archive/272/spring1997/tclos/tutorial.html
