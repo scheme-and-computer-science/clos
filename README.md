@@ -12,7 +12,7 @@ test program doesn't pass due to a [bug in Mosh](http://code.google.com/p/mosh-s
 
 The only dependency is [surfage](https://github.com/dharmatech/surfage).
 
-# Setup
+# Introduction
 
 CLOS, an acronym for Common Lisp Object System, is a standard set of extensions to the Common Lisp language to help people do object-oriented programming in Lisp. Scheme, as you know, is a dialect of Lisp with a simpler, more consistent syntax than Common Lisp's. Tiny CLOS is a Scheme version of CLOS written in 1992 by Gregor Kiczales. It differs from CLOS syntactically, but the basic approach to OOP is the same as in CLOS.
 How to Use Tiny CLOS
