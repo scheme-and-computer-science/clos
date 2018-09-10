@@ -6,5 +6,6 @@
     (""))
 ("private" . #f)
 ("scripts")
-("dependencies")
+("dependencies"
+("surfage" . "0.1.0"))
 ("devDependencies"))
