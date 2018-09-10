@@ -40,14 +40,23 @@ CLOS vs. other approaches to OOP
 
 The most popular object-oriented languages today (e.g. C++ and Java) share much of their syntax and much of their philosophy. CLOS and Tiny CLOS have a Lisp-like syntax, very different from the block-structured syntax of the other languages mentioned above. They share the notions of run-time polymorphism (i.e. a function that works in several different ways depending on the kinds of objects to which it is applied), inheritance, etc. with essentially all other OO languages. And like most OO languages, CLOS and Tiny CLOS consider every "object" to be an element of a "class", which may be written in terms of one or more "superclasses".
 The most significant difference between CLOS and the other languages mentioned above is that in CLOS (and Tiny CLOS), a polymorphic function looks and behaves like an ordinary function, not tied to any one class of objects. By contrast, every polymorphic function in C++, Java, et al ''belongs'' to one particular class, and must be invoked in conjunction with an instance of that class. For example, suppose there were a class named dial and a polymorphic function named turn, and we wished to turn the dial ThisDial to setting 200. A C++ programmer would write 
-ThisDial.turn (200); 
+
+`ThisDial.turn (200); `
+
 while a CLOS programmer would write 
-(turn ThisDial 200) 
+
+`(turn ThisDial 200) `
+
 The distinction is not merely syntactic: in C++, an action that involves multiple objects must "belong" to one of them, with the rest as parameters. For another example, suppose there are two classes named LightBulb and socket, and we wish to write a polymorphic function that (among other things) puts a light bulb into a socket. In C++ (or Java or ...), the programmer must choose whether to write a method for light bulbs, taking a socket as a parameter, or a method for sockets, taking a light bulb as a parameter: 
-ThisBulb.PutIn (ThatSocket); 
-ThatSocket.PutIn (ThisBulb); 
+
+`ThisBulb.PutIn (ThatSocket); `
+
+`ThatSocket.PutIn (ThisBulb); `
+
 whereas the CLOS programmer simply writes 
-(PutIn ThisBulb ThatSocket) 
+
+`(PutIn ThisBulb ThatSocket)` 
+
 In effect, a polymorphic function (called a "generic function" in CLOS terminology) is an ordinary function with multiple definitions, which automatically chooses the most appropriate definition at run time based on the classes of its arguments. No one argument is singled out as "the object" to which the method applies, and there is little need for the C++ construct called a "friend", a function applied to an object of one class which nonetheless has access to the private information of objects of another class.
 
 This choice has several advantages, as pointed out above. It also has disadvantages: since a method belongs not to one specific class but to a combination of classes, it is much more difficult to control the visibility of methods, and the public/protected/private distinction in C++ cannot be applied to methods. Whether you consider these disadvantages to outweigh the advantages is a personal, almost religious, decision. For more discussion of this issue, see the OOP FAQ part 1, item 1.19.
@@ -63,33 +72,42 @@ By convention, class names in CLOS are surrounded in angle-brackets, e.g. <objec
 Creating instances
 
 To create a new instance of an existing class, use the make function:
-(define sam (make <person>))
+
+`(define sam (make <person>))`
 
 creates a new instance of the <person> class and binds the Scheme variable sam to it. Some classes are defined in such a way (see the initialize function below) that additional arguments can be provided to the make function to determine properties of the new instance, e.g. to initialize its instance variables. For example, one might define the <person> class in such a manner that 
-(define sam (make <person> 'age 38))
+
+
+`(define sam (make <person> 'age 38))`
+
 would initialize an instance variable named age of the new <person> to 38.
 
 Creating classes
 
 Creating a new class can be seen as simply creating a new instance of the predefined class <class>, e.g.
+
+```
 (define <person> (make <class>
                        'direct-supers (list <object>)
                        'direct-slots (list 'name 'age)))
+```                       
+                       
+                       
 creates a new class, initializing its "list of direct superclasses" to the one-element list (<object>) and its "list of direct slots" to (name age). However, creating a new class is such a common operation that they've provided a special make-class function to do the job. It takes two arguments: the list of direct superclasses (typically only one, until you start playing with multiple inheritance) and the list of names of "slots", or instance variables. Like all Scheme variables, these variables are untyped: you can equally well plug in the number 38, the symbol bluebird, the list (red green blue), or any other Scheme (or Tiny CLOS) object. So the more common way to create the <person> class above would be
 
-(define <person> (make-class (list <object>) (list 'name 'age)))
+`(define <person> (make-class (list <object>) (list 'name 'age)))`
 
 Instance Variables
 
 In OOP in general, an "instance variable" is a variable associated with each individual instance of a class. In the above example, name and age are instance variables of the class <person> because each person has its own (possibly distinct) name and age. Instance variables may be viewed as a bigger, better version of the fields in a Pascal record or a C struct. The CLOS word for instance variable is "slot".
 To get the value of a specified slot in a specified object, use the slot-ref function, which takes two parameters -- the object in question, and the name of the slot -- and returns the value of the slot:
 
-(slot-ref sam 'age) 
+`(slot-ref sam 'age) `
 38
 
 To change the value of a specified slot in a specified object, use the slot-set! function. Notice the exclamation point at the end of the function name, indicating that (unlike most Scheme functions) this one actually changes its arguments. It takes three parameters: an object, a slot name, and the new value. So if it were Sam's birthday, we might write
 
-(slot-set! sam 'age (+ 1 (slot-ref sam 'age)))
+`(slot-set! sam 'age (+ 1 (slot-ref sam 'age)))`
 
 It is generally considered good programming practice to treat slot names as implementation, rather than interface, so users of your object class don't access slots in your objects directly. This is for two reasons: first, if users start relying on your objects to contain slots with specific names, you lose the freedom to change the implementation by renaming or even eliminating some of those instance variables; and second, an object may contain several pieces of related information that must be kept consistent, an essentially impossible task if users can change one piece of information at a time behind your back. Accordingly, most CLOS classes are provided with "access functions" whose purpose is simply to give the user certain information about the object, without the user ever knowing how that information is stored (the slot name, or even whether it is stored in a slot at all). Another kind of access function allows the user to change certain information about an object, again without knowing how that information is stored. Which brings us to...
 
@@ -99,20 +117,22 @@ Polymorphism is provided in CLOS by something called a generic function: a funct
 Creating generic functions
 
 You can create a new generic function in CLOS with the make-generic function, which takes no arguments:
-(define turn (make-generic))
+`(define turn (make-generic))`
 
 You'll probably use the function add-method, which adds a method to an existing generic, much more often. Indeed, if you apply add-method to a generic that hasn't already been defined with make-generic, it'll define it for you, so you actually never need make-generic at all.
 
-(add-method turn this-method)
+`(add-method turn this-method)`
 
 Creating and attaching methods
 
 OK, so you can use make-generic or add-method to create a generic function, and (in the latter case) attach a new "method" to it. But what is a "method"? In a nutshell, a method is an ordinary Scheme function definition, together with information indicating what classes which arguments have to belong to in order for this method to be applicable. Methods are constructed by a function named make-method, which takes two arguments, a list of classes and a function (typically presented as a lambda-form). For example,
+```
 (define this-method
         (make-method (list <dial> <number>)
                      (lambda (cnm dial setting) 
                           (while (< (position-of dial) setting)
                                  (turn-up dial)))))
+```
 Here we've defined a method which applies whenever the first argument is a <dial> and the second is a number. Its body is the lambda-form that takes two arguments named, dial and setting, and repeatedly turns up the dial until its position matches or exceeds the desired setting. (I assume that position-of and turn-up are already written somewhere.) 
 You have no doubt noticed the unexplained "cnm" parameter to the lambda-form above. In most object-oriented languages, it is possible (and common) for a method to do almost the same thing as the corresponding method for a superclass, but with a little extra work before or after. To avoid having to rewrite all the code from the superclass's method, CLOS provides a way to invoke the superclass's method for the same generic. The Tiny CLOS implementation of this is, whenever a method is invoked, to give it a function named "call-next-method" as its first parameter, so that if it wishes to invoke the superclass's method for the same generic, it can do so by simply calling call-next-method. It is perhaps unfortunate that, even if you don't intend to use the call-next-method mechanism, every method must take an extra first parameter just in case. We'll discuss how to use this mechanism later.
 
@@ -205,7 +225,7 @@ In other words, even if some user does try to provide a course list or student l
 Of course, the main reason for keeping track of students and courses is for the former to take the latter. So we'd like to write two functions add and drop, each taking a student and a course: (add sam csc272) registers Sam for CSC 272, both adding Sam to the course roster for CSC 272 and adding CSC 272 to Sam's schedule, while (drop sam csc272) removes Sam from the course roster and CSC 272 from Sam's schedule.
 
 Of course, things might go wrong. Sam might try to add a course for which he's already registered, or to drop a course for which he's not already registered, or to add a course that conflicts with another course he's already taking, etc. So we may need these functions to return some kind of error indication if they don't work. If they do work, let's have them return #f so the result can be tested easily, e.g. (if (add sam csc272) ...)
-
+```
 (add-method add
     (make-method (list <student> <course>)
         (lambda (cnm student course)
@@ -226,7 +246,9 @@ Of course, things might go wrong. Sam might try to add a course for which he's a
                   (else (remove-student student course)
                         (remove-course course student)
                         #f)))))
+```
 These functions take care of the error-checking, but rely on four more (as yet unwritten) functions named add-student, add-course, remove-student, and remove-course to do the actual change. Since these four functions have to modify the internal state of <student> and <course> objects, we'll make them part of the interface to these classes:
+```
 (add-method add-student
     (make-method (list <student> <course>)
         (lambda (cnm student course)
@@ -247,3 +269,4 @@ These functions take care of the error-checking, but rely on four more (as yet u
         (lambda (cnm course student)
             (slot-set! student 'course-list
                 (delv course (get-courses student))))))
+```
