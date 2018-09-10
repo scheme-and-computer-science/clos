@@ -14,16 +14,12 @@ The only dependency is [surfage](https://github.com/dharmatech/surfage).
 
 # Introduction
 
-CLOS, an acronym for Common Lisp Object System, is a standard set of extensions to the Common Lisp language to help people do object-oriented programming in Lisp. Scheme, as you know, is a dialect of Lisp with a simpler, more consistent syntax than Common Lisp's. Tiny CLOS is a Scheme version of CLOS written in 1992 by Gregor Kiczales. It differs from CLOS syntactically, but the basic approach to OOP is the same as in CLOS.
-How to Use Tiny CLOS
-
-Tiny CLOS is written in Scheme. The source code, if you really want to look at it, is in the file tiny-clos.scm, but it has a lot of complications due to the need to bootstrap the object and class system; an easier to understand (but not functional) version is in tiny-rpp.text. Other useful support code is in the rest of this directory.
-However, you don't need to use the source code: much more convenient is to use the command tclos, a simple shell script that runs MIT Scheme with a memory image that has Tiny CLOS already loaded. If you don't know what all that means, ignore it; just use the command tclos.
+CLOS, an acronym for Common Lisp Object System, is a standard set of extensions to the Common Lisp language to help people do object-oriented programming in Lisp. Scheme, as you know, is a dialect of Lisp with a simpler, more consistent syntax than Common Lisp's. 
 
 CLOS vs. other approaches to OOP
 
-The most popular object-oriented languages today (e.g. C++ and Java) share much of their syntax and much of their philosophy. CLOS and Tiny CLOS have a Lisp-like syntax, very different from the block-structured syntax of the other languages mentioned above. They share the notions of run-time polymorphism (i.e. a function that works in several different ways depending on the kinds of objects to which it is applied), inheritance, etc. with essentially all other OO languages. And like most OO languages, CLOS and Tiny CLOS consider every "object" to be an element of a "class", which may be written in terms of one or more "superclasses".
-The most significant difference between CLOS and the other languages mentioned above is that in CLOS (and Tiny CLOS), a polymorphic function looks and behaves like an ordinary function, not tied to any one class of objects. By contrast, every polymorphic function in C++, Java, et al ''belongs'' to one particular class, and must be invoked in conjunction with an instance of that class. For example, suppose there were a class named dial and a polymorphic function named turn, and we wished to turn the dial ThisDial to setting 200. A C++ programmer would write 
+The most popular object-oriented languages today (e.g. C++ and Java) share much of their syntax and much of their philosophy. CLOS have a Lisp-like syntax, very different from the block-structured syntax of the other languages mentioned above. They share the notions of run-time polymorphism (i.e. a function that works in several different ways depending on the kinds of objects to which it is applied), inheritance, etc. with essentially all other OO languages. And like most OO languages, CLOS consider every "object" to be an element of a "class", which may be written in terms of one or more "superclasses".
+The most significant difference between CLOS and the other languages mentioned above is that in CLOS, a polymorphic function looks and behaves like an ordinary function, not tied to any one class of objects. By contrast, every polymorphic function in C++, Java, et al 'belongs' to one particular class, and must be invoked in conjunction with an instance of that class. For example, suppose there were a class named dial and a polymorphic function named turn, and we wished to turn the dial ThisDial to setting 200. A C++ programmer would write 
 
 `ThisDial.turn (200); `
 
