@@ -82,7 +82,7 @@ By convention, class names in CLOS are surrounded in angle-brackets, e.g. `<obje
 
 To create a new instance of an existing class, use the make function:
 
-`(define sam (make <person>))`
+`(define sam (make <person> 'name "same" 'age 38))`
 
 creates a new instance of the <person> class and binds the Scheme variable sam to it. Some classes are defined in such a way (see the initialize function below) that additional arguments can be provided to the make function to determine properties of the new instance, e.g. to initialize its instance variables. For example, one might define the <person> class in such a manner that 
 
