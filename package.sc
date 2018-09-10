@@ -7,5 +7,5 @@
 ("private" . #f)
 ("scripts")
 ("dependencies"
-("surfage" . "0.1.0"))
+    ("surfage" . "0.1.0"))
 ("devDependencies"))
