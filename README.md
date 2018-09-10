@@ -60,6 +60,24 @@ and possibly other things like class or pool variables which we sha'n't discuss 
 
 By convention, class names in CLOS are surrounded in angle-brackets, e.g. `<object>, <person>`.
 
+
+***Creating classes***		
+		
+ Creating a new class can be seen as simply creating a new instance of the predefined class `<class>`, e.g.		
+		
+
+```
+ (define <person> (make <class>		
+                        'direct-supers (list <object>)		
+                        'direct-slots (list 'name 'age)))		
+```
+
+                        		
+                        		
+ creates a new class, initializing its "list of direct superclasses" to the one-element list (<object>) and its "list of direct slots" to (name age). However, creating a new class is such a common operation that they've provided a special make-class function to do the job. It takes two arguments: the list of direct superclasses (typically only one, until you start playing with multiple inheritance) and the list of names of "slots", or instance variables. Like all Scheme variables, these variables are untyped: you can equally well plug in the number 38, the symbol bluebird, the list (red green blue), or any other Scheme (or Tiny CLOS) object. So the more common way to create the <person> class above would be		
+		
+ `(define <person> (make-class (list <object>) (list 'name 'age)))`	
+
 ***Creating instances***
 
 To create a new instance of an existing class, use the make function:
@@ -68,22 +86,9 @@ To create a new instance of an existing class, use the make function:
 
 creates a new instance of the <person> class and binds the Scheme variable sam to it. Some classes are defined in such a way (see the initialize function below) that additional arguments can be provided to the make function to determine properties of the new instance, e.g. to initialize its instance variables. For example, one might define the <person> class in such a manner that 
 
-***Creating classes***		
+	
 		
- Creating a new class can be seen as simply creating a new instance of the predefined class <class>, e.g.		
-		
- ```		
- (define <person> (make <class>		
-                        'direct-supers (list <object>)		
-                        'direct-slots (list 'name 'age)))		
- ```                       		
-                        		
-                        		
- creates a new class, initializing its "list of direct superclasses" to the one-element list (<object>) and its "list of direct slots" to (name age). However, creating a new class is such a common operation that they've provided a special make-class function to do the job. It takes two arguments: the list of direct superclasses (typically only one, until you start playing with multiple inheritance) and the list of names of "slots", or instance variables. Like all Scheme variables, these variables are untyped: you can equally well plug in the number 38, the symbol bluebird, the list (red green blue), or any other Scheme (or Tiny CLOS) object. So the more common way to create the <person> class above would be		
-		
- `(define <person> (make-class (list <object>) (list 'name 'age)))`		
-		
- Instance Variables		
+ ***Instance Variables***		
 		
  In OOP in general, an "instance variable" is a variable associated with each individual instance of a class. In the above example, name and age are instance variables of the class <person> because each person has its own (possibly distinct) name and age. Instance variables may be viewed as a bigger, better version of the fields in a Pascal record or a C struct. The CLOS word for instance variable is "slot".		
  To get the value of a specified slot in a specified object, use the slot-ref function, which takes two parameters -- the object in question, and the name of the slot -- and returns the value of the slot:		
