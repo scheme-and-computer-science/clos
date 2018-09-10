@@ -23,7 +23,7 @@ The only dependency is [surfage](https://github.com/dharmatech/surfage).
 
 # Introduction
 
-CLOS vs. other approaches to OOP
+***CLOS vs. other approaches to OOP***
 
 The most popular object-oriented languages today (e.g. C++ and Java) share much of their syntax and much of their philosophy. CLOS have a Lisp-like syntax, very different from the block-structured syntax of the other languages mentioned above. They share the notions of run-time polymorphism (i.e. a function that works in several different ways depending on the kinds of objects to which it is applied), inheritance, etc. with essentially all other OO languages. And like most OO languages, CLOS consider every "object" to be an element of a "class", which may be written in terms of one or more "superclasses".
 The most significant difference between CLOS and the other languages mentioned above is that in CLOS, a polymorphic function looks and behaves like an ordinary function, not tied to any one class of objects. By contrast, every polymorphic function in C++, Java, et al 'belongs' to one particular class, and must be invoked in conjunction with an instance of that class. For example, suppose there were a class named dial and a polymorphic function named turn, and we wished to turn the dial ThisDial to setting 200. A C++ programmer would write 
@@ -48,15 +48,19 @@ In effect, a polymorphic function (called a "generic function" in CLOS terminolo
 
 This choice has several advantages, as pointed out above. It also has disadvantages: since a method belongs not to one specific class but to a combination of classes, it is much more difficult to control the visibility of methods, and the public/protected/private distinction in C++ cannot be applied to methods. Whether you consider these disadvantages to outweigh the advantages is a personal, almost religious, decision. For more discussion of this issue, see the OOP FAQ part 1, item 1.19.
 
-Classes and Objects in CLOS
+***Classes and Objects in CLOS***
 
 In CLOS, as in most object-oriented languages, every "object" is an element of one or more "classes", whose definitions may be derived from the definitions of other "superclasses". The behavior of an object is determined by its class(es): here "behavior" refers to
-instance variables, i.e. information associated with each object in the class
-methods, i.e. how various functions are implemented when applied to objects in the class
-and possibly other things like class or pool variables which we sha'n't discuss at this point
-By convention, class names in CLOS are surrounded in angle-brackets, e.g. <object>, <person>.
 
-Creating instances
+instance variables, i.e. information associated with each object in the class
+
+methods, i.e. how various functions are implemented when applied to objects in the class
+
+and possibly other things like class or pool variables which we sha'n't discuss at this point
+
+By convention, class names in CLOS are surrounded in angle-brackets, e.g. `<object>, <person>`.
+
+***Creating instances***
 
 To create a new instance of an existing class, use the make function:
 
