@@ -68,6 +68,61 @@ To create a new instance of an existing class, use the make function:
 
 creates a new instance of the <person> class and binds the Scheme variable sam to it. Some classes are defined in such a way (see the initialize function below) that additional arguments can be provided to the make function to determine properties of the new instance, e.g. to initialize its instance variables. For example, one might define the <person> class in such a manner that 
 
+Creating classes		
+		
+ Creating a new class can be seen as simply creating a new instance of the predefined class <class>, e.g.		
+		
+ ```		
+ (define <person> (make <class>		
+                        'direct-supers (list <object>)		
+                        'direct-slots (list 'name 'age)))		
+ ```                       		
+                        		
+                        		
+ creates a new class, initializing its "list of direct superclasses" to the one-element list (<object>) and its "list of direct slots" to (name age). However, creating a new class is such a common operation that they've provided a special make-class function to do the job. It takes two arguments: the list of direct superclasses (typically only one, until you start playing with multiple inheritance) and the list of names of "slots", or instance variables. Like all Scheme variables, these variables are untyped: you can equally well plug in the number 38, the symbol bluebird, the list (red green blue), or any other Scheme (or Tiny CLOS) object. So the more common way to create the <person> class above would be		
+		
+ `(define <person> (make-class (list <object>) (list 'name 'age)))`		
+		
+ Instance Variables		
+		
+ In OOP in general, an "instance variable" is a variable associated with each individual instance of a class. In the above example, name and age are instance variables of the class <person> because each person has its own (possibly distinct) name and age. Instance variables may be viewed as a bigger, better version of the fields in a Pascal record or a C struct. The CLOS word for instance variable is "slot".		
+ To get the value of a specified slot in a specified object, use the slot-ref function, which takes two parameters -- the object in question, and the name of the slot -- and returns the value of the slot:		
+		
+ `(slot-ref sam 'age) `		
+ 38		
+		
+ To change the value of a specified slot in a specified object, use the slot-set! function. Notice the exclamation point at the end of the function name, indicating that (unlike most Scheme functions) this one actually changes its arguments. It takes three parameters: an object, a slot name, and the new value. So if it were Sam's birthday, we might write		
+		
+ `(slot-set! sam 'age (+ 1 (slot-ref sam 'age)))`		
+		
+ It is generally considered good programming practice to treat slot names as implementation, rather than interface, so users of your object class don't access slots in your objects directly. This is for two reasons: first, if users start relying on your objects to contain slots with specific names, you lose the freedom to change the implementation by renaming or even eliminating some of those instance variables; and second, an object may contain several pieces of related information that must be kept consistent, an essentially impossible task if users can change one piece of information at a time behind your back. Accordingly, most CLOS classes are provided with "access functions" whose purpose is simply to give the user certain information about the object, without the user ever knowing how that information is stored (the slot name, or even whether it is stored in a slot at all). Another kind of access function allows the user to change certain information about an object, again without knowing how that information is stored. Which brings us to...		
+		
+ Generic functions and methods		
+		
+ Polymorphism is provided in CLOS by something called a generic function: a function with (potentially) several different definitions (methods), one of which is chosen at run-time based on the classes of the arguments.		
+		
+ Creating generic functions		
+		
+ You can create a new generic function in CLOS with the make-generic function, which takes no arguments:		
+		
+ `(define turn (make-generic))`		
+		
+ You'll probably use the function add-method, which adds a method to an existing generic, much more often. Indeed, if you apply add-method to a generic that hasn't already been defined with make-generic, it'll define it for you, so you actually never need make-generic at all.		
+		
+ `(add-method turn this-method)`		
+		
+ Creating and attaching methods		
+		
+ OK, so you can use make-generic or add-method to create a generic function, and (in the latter case) attach a new "method" to it. But what is a "method"? In a nutshell, a method is an ordinary Scheme function definition, together with information indicating what classes which arguments have to belong to in order for this method to be applicable. Methods are constructed by a function named make-method, which takes two arguments, a list of classes and a function (typically presented as a lambda-form). For example,		
+		
+ ```		
+ (define this-method		
+         (make-method (list <dial> <number>)		
+                      (lambda (cnm dial setting) 		
+                           (while (< (position-of dial) setting)		
+                                  (turn-up dial)))))		
+ ```
+ 
 
 This manuel is modified from Tiny CLOS Tutorial
 
