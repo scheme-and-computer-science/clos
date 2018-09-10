@@ -1,5 +1,5 @@
 
-# What is ClOS?
+# What is CLOS?
 
 Common Lisp Object System port to R6RS Scheme.
 
