@@ -1,7 +1,7 @@
 
 # What is this?
 
-Tiny CLOS for R6RS Scheme.
+Common Lisp Object System port to R6RS Scheme.
 
 Christian Sloma did the [original conversion](https://code.launchpad.net/~c-sloma/r6rs-clos/r6rs-clos-dev) to R6RS. The Mosh Scheme
 team packaged it for Mosh. I ran into some issues in getting Sloma's
