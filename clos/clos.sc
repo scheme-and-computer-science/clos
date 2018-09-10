@@ -107,14 +107,14 @@
 
     (define-syntax define-class
         (syntax-rules ()
-            ((_ name () ?slot-def ...)
-                (define-class name (<object>) ?slot-def ...))
-            ((_ name (?super ...) ?slot-def ...)
+            ((_ name () slot ...)
+                (define-class name (<object>) slot ...))
+            ((_ name (super ...) slot ...)
                 (define name
                     (make <class>
                         'definition-name 'name
-                        'direct-supers   (list ?super ...) 
-                        'direct-slots    '(?slot-def ...))))))
+                        'direct-supers   (list super ...) 
+                        'direct-slots    '(slot ...))))))
         
     (define-syntax define-generic 
         (syntax-rules ()
