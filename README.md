@@ -12,6 +12,20 @@ test program doesn't pass due to a [bug in Mosh](http://code.google.com/p/mosh-s
 
 The only dependency is [surfage](https://github.com/dharmatech/surfage).
 
+# Port History
+
+> 1992 Xerox Corporation  -Original Code
+
+> 2007 Christian Sloma -Port to R6RS
+
+> 2008? Mosh Scheme team -Packaged for Mosh
+
+> 2010 dharmatech -Port to another Implantation
+
+> 2018 Guenchi -Repackage and write document for Raven
+
+
+
 # Introduction
 
 CLOS, an acronym for Common Lisp Object System, is a standard set of extensions to the Common Lisp language to help people do object-oriented programming in Lisp. Scheme, as you know, is a dialect of Lisp with a simpler, more consistent syntax than Common Lisp's. 
