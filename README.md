@@ -74,7 +74,9 @@ By convention, class names in CLOS are surrounded in angle-brackets, e.g. `<obje
 
                         		
                         		
- creates a new class, initializing its "list of direct superclasses" to the one-element list (<object>) and its "list of direct slots" to (name age). However, creating a new class is such a common operation that they've provided a special make-class function to do the job. It takes two arguments: the list of direct superclasses (typically only one, until you start playing with multiple inheritance) and the list of names of "slots", or instance variables. Like all Scheme variables, these variables are untyped: you can equally well plug in the number 38, the symbol bluebird, the list (red green blue), or any other Scheme (or CLOS) object. So the more common way to create the <person> class above would be		
+ creates a new class, initializing its "list of direct superclasses" to the one-element list (<object>) and its "list of direct slots" to (name age). However, creating a new class is such a common operation that they've provided a special make-class function to do the job. It takes two arguments: the list of direct superclasses (typically only one, until you start playing with multiple inheritance) and the list of names of "slots", or instance variables. Like all Scheme variables, these variables are untyped: you can equally well plug in the number 38, the symbol bluebird, the list (red green blue), or any other Scheme (or CLOS) object. 
+	
+With a syntax defined, the more simply way to create the <person> class above would be		
 		
  `(define-class <person> (<object>) name age)`	
 
