@@ -86,30 +86,48 @@ To create a new instance of an existing class, use the make function:
 
 `(define sam (make <person>))`
 
-If you want to set clots with creating instance, initialize the class first:
+creates a new instance of the <person> class and binds the Scheme variable sam to it. Some classes are defined in such a way (see the initialize function below) that additional arguments can be provided to the make function to determine properties of the new instance, e.g. to initialize its instance variables. For example, one might define the <person> class in such a manner that 
+
+***The initialize generic***		
+		
+ Many object-oriented systems come with a variety of classes and methods already defined, and expect the user to create subclasses and override those methods as need be. One example is the initialize generic, which is called automatically whenever make creates a new instance of a class. The first argument to initialize is the object being created, and the second is a list of any extra arguments that were given to make.		
+		
+ I know that's a little confusing; here's an example that may help. Suppose we've defined the <person> class as above, and we want to provide a person's name (and, optionally, age) at the same time we create a <person> object. We might write		
+		
 
 ```
 (define-method initialize 'after ((person <person>) args)
-    (initialize-direct-slots person <person> args))
-    
-(define sam (make <person> 'name "sam" 'age 38))
+    (initialize-direct-slots person <person> args))		
 ```
-
-creates a new instance of the <person> class and binds the Scheme variable sam to it. Some classes are defined in such a way (see the initialize function below) that additional arguments can be provided to the make function to determine properties of the new instance, e.g. to initialize its instance variables. For example, one might define the <person> class in such a manner that 
-
-	
+ 
+		
+ Now we can create a person named "Sam" by typing		
+		
+ `(define person1 (make <person> 'name "sam"))`		
+		
+ and another, 25-year-old, person named "Jeff" by typing		
+		
+ `(define person2 (make <person> 'name "Jeff" 'age 25))`		
+		
+ Since a fairly common use of the initialize generic is simply to initialize named slots, I've written a subclass of <object> named <init-object> whose initialize method accepts a list of slot names and values; see initargs.scm for the (fairly simple) source code. A typical use would be		
+		
+ `(define <person> (make-class (list <init-object>) (list 'name 'age)))`		
+ `(define pal (make <person> 'name "Jane" 'age 46))`		
+		
+ This violates the principle that users shouldn't know the names of slots; the <init-object> class is just a convenience for constructing illustrative examples quickly.	
 		
  ***Instance Variables***		
 		
- In OOP in general, an "instance variable" is a variable associated with each individual instance of a class. In the above example, name and age are instance variables of the class <person> because each person has its own (possibly distinct) name and age. Instance variables may be viewed as a bigger, better version of the fields in a Pascal record or a C struct. The CLOS word for instance variable is "slot".		
- To get the value of a specified slot in a specified object, use the slot-ref function, which takes two parameters -- the object in question, and the name of the slot -- and returns the value of the slot:		
-		
- `(slot-ref sam 'age) `		
- 38		
+ In OOP in general, an "instance variable" is a variable associated with each individual instance of a class. In the above example, name and age are instance variables of the class <person> because each person has its own (possibly distinct) name and age. Instance variables may be viewed as a bigger, better version of the fields in a Pascal record or a C struct. The CLOS word for instance variable is "slot".
 		
  To change the value of a specified slot in a specified object, use the slot-set! function. Notice the exclamation point at the end of the function name, indicating that (unlike most Scheme functions) this one actually changes its arguments. It takes three parameters: an object, a slot name, and the new value. So if it were Sam's birthday, we might write		
 		
- `(slot-set! sam 'age (+ 1 (slot-ref sam 'age)))`		
+ `(slot-set! sam 'age (+ 1 (slot-ref sam 'age)))`	
+ 
+  To get the value of a specified slot in a specified object, use the slot-ref function, which takes two parameters -- the object in question, and the name of the slot -- and returns the value of the slot:		
+		
+ `(slot-ref sam 'age) `		
+ 38		
 		
  It is generally considered good programming practice to treat slot names as implementation, rather than interface, so users of your object class don't access slots in your objects directly. This is for two reasons: first, if users start relying on your objects to contain slots with specific names, you lose the freedom to change the implementation by renaming or even eliminating some of those instance variables; and second, an object may contain several pieces of related information that must be kept consistent, an essentially impossible task if users can change one piece of information at a time behind your back. Accordingly, most CLOS classes are provided with "access functions" whose purpose is simply to give the user certain information about the object, without the user ever knowing how that information is stored (the slot name, or even whether it is stored in a slot at all). Another kind of access function allows the user to change certain information about an object, again without knowing how that information is stored. Which brings us to...		
 		
@@ -155,37 +173,7 @@ Here we've defined a method which applies whenever the first argument is a <dial
                                   (turn-up dial)))))		
 ```
 
- ***The initialize generic***		
-		
- Many object-oriented systems come with a variety of classes and methods already defined, and expect the user to create subclasses and override those methods as need be. One example is the initialize generic, which is called automatically whenever make creates a new instance of a class. The first argument to initialize is the object being created, and the second is a list of any extra arguments that were given to make.		
-		
- I know that's a little confusing; here's an example that may help. Suppose we've defined the <person> class as above, and we want to provide a person's name (and, optionally, age) at the same time we create a <person> object. We might write		
-		
-
-```
- (add-method initialize		
-     (make-method (list <person>)		
-         (lambda (cnm obj initargs)		
-             (slot-set! obj 'name (car initargs))		
-             (unless (null (cdr initargs))		
-                     (slot-set! obj 'age (cadr initargs))))))		
-```
- 
-		
- Now we can create a person named "Sam" by typing		
-		
- `(define friend1 (make <person> "Sam"))`		
-		
- and another, 25-year-old, person named "Jeff" by typing		
-		
- `(define friend2 (make <person> "Jeff" 25))`		
-		
- Since a fairly common use of the initialize generic is simply to initialize named slots, I've written a subclass of <object> named <init-object> whose initialize method accepts a list of slot names and values; see initargs.scm for the (fairly simple) source code. A typical use would be		
-		
- `(define <person> (make-class (list <init-object>) (list 'name 'age)))`		
- `(define pal (make <person> 'name "Jane" 'age 46))`		
-		
- This violates the principle that users shouldn't know the names of slots; the <init-object> class is just a convenience for constructing illustrative examples quickly.		
+	
 		
  An example		
 		
