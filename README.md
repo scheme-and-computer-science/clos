@@ -13,15 +13,17 @@ The only dependency is [surfage](https://github.com/dharmatech/surfage).
 
 > 2007 Christian Sloma -Port to R6RS
 
-> 2008? Mosh Scheme team -Packaged for Mosh
+> 2008? [Mosh Scheme team](http://mosh.monaos.org/files/doc/text/About-txt.html) -Packaged for Mosh
 
-> 2010 dharmatech -Port to another Implantation
+> 2010 [dharmatech](https://github.com/dharmatech) -Port to another Implantation
 
-> 2018 Guenchi -Repackage and write document for Raven
+> 2018 [Guenchi](https://github.com/guenchi) -Repackage and write document for Raven
 
 
 
 # Introduction
+
+This manuel is modified from [Tiny CLOS Tutorial](https://home.adelphi.edu/sbloch/class/archive/272/spring1997/tclos/tutorial.html) by [Guenchi](https://github.com/guenchi)
 
 ***CLOS vs. other approaches to OOP***
 
@@ -292,6 +294,4 @@ Here we've defined a method which applies whenever the first argument is a <dial
                  (delv course (get-courses student))))))		
  ``` 
 
-This manuel is modified from Tiny CLOS Tutorial
 
-https://home.adelphi.edu/sbloch/class/archive/272/spring1997/tclos/tutorial.html
