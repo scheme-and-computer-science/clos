@@ -84,7 +84,16 @@ With a syntax defined, the more simply way to create the <person> class above wo
 
 To create a new instance of an existing class, use the make function:
 
-`(define sam (make <person> 'name "same" 'age 38))`
+`(define sam (make <person>))`
+
+If you want to set clots with creating instance, initialize the class first:
+
+```
+(define-method initialize 'after ((person <person>) args)
+    (initialize-direct-slots person <person> args))
+    
+(define sam (make <person> 'name "sam" 'age 38))
+```
 
 creates a new instance of the <person> class and binds the Scheme variable sam to it. Some classes are defined in such a way (see the initialize function below) that additional arguments can be provided to the make function to determine properties of the new instance, e.g. to initialize its instance variables. For example, one might define the <person> class in such a manner that 
 
@@ -149,14 +158,16 @@ Here we've defined a method which applies whenever the first argument is a <dial
 		
  I know that's a little confusing; here's an example that may help. Suppose we've defined the <person> class as above, and we want to provide a person's name (and, optionally, age) at the same time we create a <person> object. We might write		
 		
- ```		
+
+```
  (add-method initialize		
      (make-method (list <person>)		
          (lambda (cnm obj initargs)		
              (slot-set! obj 'name (car initargs))		
              (unless (null (cdr initargs))		
                      (slot-set! obj 'age (cadr initargs))))))		
- ```		
+```
+ 
 		
  Now we can create a person named "Sam" by typing		
 		
