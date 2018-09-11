@@ -113,21 +113,24 @@ creates a new instance of the <person> class and binds the Scheme variable sam t
 		
  It is generally considered good programming practice to treat slot names as implementation, rather than interface, so users of your object class don't access slots in your objects directly. This is for two reasons: first, if users start relying on your objects to contain slots with specific names, you lose the freedom to change the implementation by renaming or even eliminating some of those instance variables; and second, an object may contain several pieces of related information that must be kept consistent, an essentially impossible task if users can change one piece of information at a time behind your back. Accordingly, most CLOS classes are provided with "access functions" whose purpose is simply to give the user certain information about the object, without the user ever knowing how that information is stored (the slot name, or even whether it is stored in a slot at all). Another kind of access function allows the user to change certain information about an object, again without knowing how that information is stored. Which brings us to...		
 		
- Generic functions and methods		
+ ***Generic functions and methods***		
 		
  Polymorphism is provided in CLOS by something called a generic function: a function with (potentially) several different definitions (methods), one of which is chosen at run-time based on the classes of the arguments.		
 		
- Creating generic functions		
+ ***Creating generic functions***		
 		
  You can create a new generic function in CLOS with the make-generic function, which takes no arguments:		
 		
- `(define turn (make-generic))`		
+ `(define-generic turn)`		
 		
  You'll probably use the function add-method, which adds a method to an existing generic, much more often. Indeed, if you apply add-method to a generic that hasn't already been defined with make-generic, it'll define it for you, so you actually never need make-generic at all.		
+
+```
+ (define-method turn ((person <person>))
+     (+ (slot-ref person 'age) 1))
+ ```
 		
- `(add-method turn this-method)`		
-		
- Creating and attaching methods		
+ ***Creating and attaching methods***		
 		
  OK, so you can use make-generic or add-method to create a generic function, and (in the latter case) attach a new "method" to it. But what is a "method"? In a nutshell, a method is an ordinary Scheme function definition, together with information indicating what classes which arguments have to belong to in order for this method to be applicable. Methods are constructed by a function named make-method, which takes two arguments, a list of classes and a function (typically presented as a lambda-form). For example,		
 		
@@ -152,7 +155,7 @@ Here we've defined a method which applies whenever the first argument is a <dial
                                   (turn-up dial)))))		
 ```
 
- The initialize generic		
+ ***The initialize generic***		
 		
  Many object-oriented systems come with a variety of classes and methods already defined, and expect the user to create subclasses and override those methods as need be. One example is the initialize generic, which is called automatically whenever make creates a new instance of a class. The first argument to initialize is the object being created, and the second is a list of any extra arguments that were given to make.		
 		
